@@ -43,4 +43,17 @@ p {
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  .location-info {
+    font-size: 1rem;
+  }
+}
 
