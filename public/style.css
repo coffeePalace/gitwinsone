@@ -36,24 +36,21 @@ p {
 }
 .hero-image {
   width: 100%;
-  max-width: 900px;        /* limits size on large screens */
-  height: auto;            /* keeps aspect ratio */
-  margin: 24px auto;       /* centers image */
+  max-width: 900px;
+  max-height: 420px;       /* 🔑 controls vertical size */
+  height: auto;
+  object-fit: cover;       /* crops nicely instead of stretching */
+  margin: 20px auto;
   display: block;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
+
 @media (max-width: 600px) {
-  h1 {
-    font-size: 2.2rem;
-  }
-
-  p {
-    font-size: 1rem;
-  }
-
-  .location-info {
-    font-size: 1rem;
+  .hero-image {
+    max-height: 260px;     /* much smaller on phones */
+    border-radius: 10px;
   }
 }
+
 
