@@ -10,10 +10,13 @@ body {
 }
 
 .container {
-  max-width: 700px;
+  max-width: 960px;
+  width: 100%;
+  padding: 24px;
+  margin: 0 auto;
   text-align: center;
-  padding: 40px;
 }
+
 
 h1 {
   font-size: 3rem;
@@ -32,8 +35,12 @@ p {
   color: #ffeb3b;
 }
 .hero-image {
-  margin-top: 30px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 900px;        /* limits size on large screens */
+  height: auto;            /* keeps aspect ratio */
+  margin: 24px auto;       /* centers image */
+  display: block;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
+
