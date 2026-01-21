@@ -1,15 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WinsOne</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
 
   <main class="container">
-<img 
-  src="https://d1wrba3bcjbq5q.cloudfront.net/operators/images/callcenter.jpg"
-  alt="Travel Operations"
-  class="hero-image"
-  loading="lazy"
-/>
 
+    <h1>Welcome to WinsOne 1.2</h1>
 
-    <h1>Welcome to WinsOne 1.1</h1>
+    <img 
+      src="https://d1wrba3bcjbq5q.cloudfront.net/operators/images/callcenter.jpg"
+      alt="Travel Operations"
+      class="hero-image"
+      loading="lazy"
+    />
+
     <p>
       WinsOne is a travel intelligence platform focused on smarter decisions,
       better timing, and cost transparency — not ticket sales.
@@ -18,10 +31,10 @@
     <div id="visitor-location" class="location-info">
       Detecting your location...
     </div>
+
   </main>
 
   <script>
-    // Call free API to get visitor location
     fetch("https://ipapi.co/json/")
       .then(response => response.json())
       .then(data => {
@@ -33,11 +46,11 @@
         locationDiv.textContent =
           `Hello! We detected that you’re visiting from ${city}, ${region}, ${country}.`;
       })
-      .catch(error => {
+      .catch(() => {
         document.getElementById("visitor-location").textContent =
           "Could not detect location.";
-        console.error(error);
       });
   </script>
 
 </body>
+</html>

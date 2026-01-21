@@ -1,14 +1,12 @@
+/* Base styles */
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
   background: linear-gradient(135deg, #1a2a33, #243b55);
   color: #f5f5f5;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
+/* Layout container */
 .container {
   max-width: 960px;
   width: 100%;
@@ -17,7 +15,7 @@ body {
   text-align: center;
 }
 
-
+/* Headings & text */
 h1 {
   font-size: 3rem;
   margin-bottom: 16px;
@@ -28,29 +26,44 @@ p {
   line-height: 1.6;
   color: #d0d7de;
 }
+
+/* Location text */
 .location-info {
   margin-top: 24px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 500;
   color: #ffeb3b;
 }
+
+/* Hero image (RESPONSIVE & CONTROLLED) */
 .hero-image {
   width: 100%;
   max-width: 900px;
-  max-height: 420px;       /* 🔑 controls vertical size */
+  max-height: 420px;
   height: auto;
-  object-fit: cover;       /* crops nicely instead of stretching */
+  object-fit: cover;
   margin: 20px auto;
   display: block;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
+/* Mobile optimizations */
 @media (max-width: 600px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  .location-info {
+    font-size: 1rem;
+  }
+
   .hero-image {
-    max-height: 260px;     /* much smaller on phones */
+    max-height: 260px;
     border-radius: 10px;
   }
 }
-
-
