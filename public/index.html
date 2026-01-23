@@ -2,54 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Maiden Wins</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WinsOne</title>
-
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <main class="container">
-
-    <h1>Welcome to WinsOne 1.2</h1>
-
-    <img 
-      src="https://d1wrba3bcjbq5q.cloudfront.net/operators/images/callcenter.jpg"
-      alt="Travel Operations"
-      class="hero-image"
-      loading="lazy"
-    />
-
-    <p>
-      WinsOne is a travel intelligence platform focused on smarter decisions,
-      better timing, and cost transparency — not ticket sales.
-    </p>
-
-    <div id="visitor-location" class="location-info">
-      Detecting your location...
-    </div>
-
-  </main>
+  <h1>Maiden Wins</h1>
+  <p>Adventure travel discovery platform</p>
 
   <script>
-    fetch("https://ipapi.co/json/")
-      .then(response => response.json())
-      .then(data => {
-        const locationDiv = document.getElementById("visitor-location");
-        const city = data.city || "Unknown city";
-        const region = data.region || "";
-        const country = data.country_name || "Unknown country";
+    (async function () {
 
-        locationDiv.textContent =
-          `Hello! We detected that you’re visiting from ${city}, ${region}, ${country}.`;
-      })
-      .catch(() => {
-        document.getElementById("visitor-location").textContent =
-          "Could not detect location.";
-      });
+      /* ---------- CONFIG ---------- */
+      const API_URL =
+        "https://2elwmyyjr8.execute-api.ap-south-1.amazonaws.com/log-visitor";
+
+      const API_KEY = "MW-SECRET-2026-9f3cX";
+
+      /* ---------- VISITOR ID ---------- */
+      const VISITOR_KEY = "mw_visitor_id";
+      let visitorId = localStorage.getItem(VISITOR_KEY);
+
+      if (!visitorId) {
+        visitorId = crypto.randomUUID();
+        localStorage.setItem(VISITOR_KEY, visitorId);
+      }
+
+      /* ---------- DATETIME FORMAT yyyy-mm-dd hh:mm:ss ---------- */
+      function formatDateTime(date) {
+        const pad = (n) => n.toString().padStart(2, "0");
+        return (
+          date.getFullYear() + "-" +
+          pad(date.getMonth() + 1) + "-" +
+          pad(date.getDate()) + " " +
+          pad(date.getHours()) + ":" +
+          pad(date.getMinutes()) + ":" +
+          pad(date.getSeconds())
+        );
+      }
+
+      const visitDateTime = formatDateTime(new Date());
+
+      /* ---------- GEO LOOKUP (FREE) ---------- */
+      let city = "unknown";
+      let country = "unknown";
+
+      try {
+        const geoRes = await fetch("https://ipapi.co/json/");
+        const geoData = await geoRes.json();
+        city = geoData.city || "unknown";
+        country = geoData.country_name || "unknown";
+      } catch (e) {
+        // silent fail
+      }
+
+      /* ---------- PAYLOAD ---------- */
+      const payload = {
+        visitor_id: visitorId,
+        visit_datetime: visitDateTime,
+        visitor_city: city,
+        visitor_country: country,
+        platform_source: "vercel",
+        platform_source_page: "vercel_homepage"
+      };
+
+      /* ---------- SEND TO AWS ---------- */
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": API_KEY
+          },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        // never block page load
+      }
+
+    })();
   </script>
 
 </body>
