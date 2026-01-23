@@ -10,78 +10,77 @@
   <h1>Maiden Wins</h1>
   <p>Adventure travel discovery platform</p>
 
-  <script>
-    (async function () {
+<script>
+  (async function () {
 
-      /* ---------- CONFIG ---------- */
-      const API_URL =
-        "https://2elwmyyjr8.execute-api.ap-south-1.amazonaws.com/log-visitor";
+    /* ---------- CONFIG ---------- */
+    const API_URL =
+      "https://xt9h7yfrn4.execute-api.ap-south-1.amazonaws.com/platformlogstage/test";
 
-      const API_KEY = "MW-SECRET-2026-9f3cX";
+    const API_KEY = "MW-SECRET-2026-9f3cX";
 
-      /* ---------- VISITOR ID ---------- */
-      const VISITOR_KEY = "mw_visitor_id";
-      let visitorId = localStorage.getItem(VISITOR_KEY);
+    /* ---------- VISITOR ID ---------- */
+    const VISITOR_KEY = "mw_visitor_id";
+    let visitorId = localStorage.getItem(VISITOR_KEY);
 
-      if (!visitorId) {
-        visitorId = crypto.randomUUID();
-        localStorage.setItem(VISITOR_KEY, visitorId);
-      }
+    if (!visitorId) {
+      visitorId = crypto.randomUUID();
+      localStorage.setItem(VISITOR_KEY, visitorId);
+    }
 
-      /* ---------- DATETIME FORMAT yyyy-mm-dd hh:mm:ss ---------- */
-      function formatDateTime(date) {
-        const pad = (n) => n.toString().padStart(2, "0");
-        return (
-          date.getFullYear() + "-" +
-          pad(date.getMonth() + 1) + "-" +
-          pad(date.getDate()) + " " +
-          pad(date.getHours()) + ":" +
-          pad(date.getMinutes()) + ":" +
-          pad(date.getSeconds())
-        );
-      }
+    /* ---------- DATETIME FORMAT yyyy-mm-dd hh:mm:ss ---------- */
+    function formatDateTime(date) {
+      const pad = (n) => n.toString().padStart(2, "0");
+      return (
+        date.getFullYear() + "-" +
+        pad(date.getMonth() + 1) + "-" +
+        pad(date.getDate()) + " " +
+        pad(date.getHours()) + ":" +
+        pad(date.getMinutes()) + ":" +
+        pad(date.getSeconds())
+      );
+    }
 
-      const visitDateTime = formatDateTime(new Date());
+    const visitDateTime = formatDateTime(new Date());
 
-      /* ---------- GEO LOOKUP (FREE) ---------- */
-      let city = "unknown";
-      let country = "unknown";
+    /* ---------- GEO LOOKUP ---------- */
+    let city = "unknown";
+    let country = "unknown";
 
-      try {
-        const geoRes = await fetch("https://ipapi.co/json/");
-        const geoData = await geoRes.json();
-        city = geoData.city || "unknown";
-        country = geoData.country_name || "unknown";
-      } catch (e) {
-        // silent fail
-      }
+    try {
+      const geoRes = await fetch("https://ipapi.co/json/");
+      const geoData = await geoRes.json();
+      city = geoData.city || "unknown";
+      country = geoData.country_name || "unknown";
+    } catch (e) {}
 
-      /* ---------- PAYLOAD ---------- */
-      const payload = {
-        visitor_id: visitorId,
-        visit_datetime: visitDateTime,
-        visitor_city: city,
-        visitor_country: country,
-        platform_source: "vercel",
-        platform_source_page: "vercel_homepage"
-      };
+    /* ---------- PAYLOAD ---------- */
+    const payload = {
+      visitor_id: visitorId,
+      visit_datetime: visitDateTime,
+      visitor_city: city,
+      visitor_country: country,
+      platform_source: "vercel",
+      platform_source_page: "vercel_homepage"
+    };
 
-      /* ---------- SEND TO AWS ---------- */
-      try {
-        await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": API_KEY
-          },
-          body: JSON.stringify(payload)
-        });
-      } catch (err) {
-        // never block page load
-      }
+    /* ---------- SEND TO AWS ---------- */
+    try {
+      await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": API_KEY
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      // silent fail
+    }
 
-    })();
-  </script>
+  })();
+</script>
+
 
 </body>
 </html>
