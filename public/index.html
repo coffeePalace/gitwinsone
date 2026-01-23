@@ -55,6 +55,23 @@
   </style>
 </head>
 
+<p id="ip-info" style="margin-top:14px; font-size:0.9rem; color:#9aa3ad;">
+  Detecting location…
+</p>
+
+<script>
+  fetch("/api/location")
+    .then(res => res.json())
+    .then(loc => {
+      document.getElementById("ip-info").innerText =
+        `Visitor location: ${loc.city}, ${loc.country}`;
+    })
+    .catch(() => {
+      document.getElementById("ip-info").innerText =
+        "Location unavailable";
+    });
+</script>
+
 <body>
   <div class="container">
     <h1>MaidenWins</h1>
@@ -68,24 +85,4 @@
 </body>
 </html>
 
-<p id="ip-info" style="margin-top:14px; font-size:0.9rem; color:#9aa3ad;">
-  Detecting location…
-</p>
-
-<script>
-  fetch("https://api.ipify.org?format=json")
-    .then(res => res.json())
-    .then(data => {
-      return fetch(`https://ipapi.co/${data.ip}/json/`);
-    })
-    .then(res => res.json())
-    .then(loc => {
-      document.getElementById("ip-info").innerText =
-        `Visitor location: ${loc.city}, ${loc.country_name}`;
-    })
-    .catch(() => {
-      document.getElementById("ip-info").innerText =
-        "Location unavailable";
-    });
-</script>
 
