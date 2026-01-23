@@ -11,15 +11,15 @@
   <p>Adventure & experiential travel discovery platform</p>
 
   <script>
-    (async function () {
+    (function () {
 
-      /* ---------- CONFIG (CONFIRMED WORKING) ---------- */
+      /* ---------- CONFIG (CURRENT AWS API) ---------- */
       const API_URL =
-        "https://xt9h7yfrn4.execute-api.ap-south-1.amazonaws.com/platformlogstage/test";
+        "https://c7sw1qe043.execute-api.ap-south-1.amazonaws.com/log-visitor";
 
       const API_KEY = "MW-SECRET-2026-9f3cX";
 
-      /* ---------- VISITOR ID (PERSISTENT) ---------- */
+      /* ---------- VISITOR ID ---------- */
       const VISITOR_KEY = "mw_visitor_id";
       let visitorId = localStorage.getItem(VISITOR_KEY);
 
@@ -28,7 +28,7 @@
         localStorage.setItem(VISITOR_KEY, visitorId);
       }
 
-      /* ---------- DATETIME FORMAT: yyyy-mm-dd hh:mm:ss ---------- */
+      /* ---------- DATETIME yyyy-mm-dd hh:mm:ss ---------- */
       function formatDateTime(date) {
         const pad = (n) => n.toString().padStart(2, "0");
         return (
@@ -43,18 +43,9 @@
 
       const visitDateTime = formatDateTime(new Date());
 
-      /* ---------- GEO LOOKUP (FREE, CLIENT-SIDE) ---------- */
+      /* ---------- DEFAULT GEO ---------- */
       let city = "unknown";
       let country = "unknown";
-
-      try {
-        const geoRes = await fetch("https://ipapi.co/json/");
-        const geoData = await geoRes.json();
-        city = geoData.city || "unknown";
-        country = geoData.country_name || "unknown";
-      } catch (e) {
-        // silent fail – never block page load
-      }
 
       /* ---------- PAYLOAD ---------- */
       const payload = {
@@ -66,19 +57,33 @@
         platform_source_page: "vercel_homepage"
       };
 
-      /* ---------- SEND TO AWS ---------- */
-      try {
-        await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": API_KEY
-          },
-          body: JSON.stringify(payload)
-        });
-      } catch (err) {
-        // do nothing – analytics must never break UX
-      }
+      /* ---------- SEND TO AWS (DO NOT BLOCK) ---------- */
+      fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": API_KEY
+        },
+        body: JSON.stringify(payload)
+      }).catch(() => {});
+
+      /* ---------- OPTIONAL GEO ENRICH (NON-BLOCKING) ---------- */
+      fetch("https://ipapi.co/json/")
+        .then(r => r.json())
+        .then(d => {
+          payload.visitor_city = d.city || "unknown";
+          payload.visitor_country = d.country_name || "unknown";
+
+          fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": API_KEY
+            },
+            body: JSON.stringify(payload)
+          }).catch(() => {});
+        })
+        .catch(() => {});
 
     })();
   </script>
