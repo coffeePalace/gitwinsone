@@ -55,34 +55,38 @@
   </style>
 </head>
 
-<p id="ip-info" style="margin-top:14px; font-size:0.9rem; color:#9aa3ad;">
-  Detecting location…
-</p>
-
-<script>
-  fetch("/api/location")
-    .then(res => res.json())
-    .then(loc => {
-      document.getElementById("ip-info").innerText =
-        `Visitor location: ${loc.city}, ${loc.country}`;
-    })
-    .catch(() => {
-      document.getElementById("ip-info").innerText =
-        "Location unavailable";
-    });
-</script>
-
 <body>
   <div class="container">
-    <h1>MaidenWins</h1>
+    <h1>W I N S O N E</h1>
+
     <p>
       A new tourism technology venture.<br />
       Business commenced in 2026.<br />
       Our website is currently under development.
     </p>
-    <div class="year">© All Rights Reserved 2026</div>
+
+    <!-- ADD THIS INSIDE CONTAINER -->
+    <p id="ip-info" class="location">
+      Detecting location…
+    </p>
+
+    <div class="year">© 2026</div>
   </div>
+
+  <script>
+    fetch("/api/location")
+      .then(res => res.json())
+      .then(loc => {
+        document.getElementById("ip-info").innerText =
+          `Visitor location: ${loc.city}, ${loc.country}`;
+      })
+      .catch(() => {
+        document.getElementById("ip-info").innerText =
+          "Location unavailable";
+      });
+  </script>
 </body>
+
 </html>
 
 
