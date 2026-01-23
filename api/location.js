@@ -1,9 +1,13 @@
 export default async function handler(req, res) {
   const data = {
     city: req.headers["x-vercel-ip-city"] || "Unknown",
-    region: req.headers["x-vercel-ip-region"] || "",
     country: req.headers["x-vercel-ip-country"] || "Unknown",
-    timestamp: new Date().toISOString()
+
+    // ✅ ADD THESE TWO
+    platform: "vercel",
+    platform_page: "homepage",
+
+    timestamp_utc: new Date().toISOString()
   };
 
   try {
@@ -13,9 +17,8 @@ export default async function handler(req, res) {
       body: JSON.stringify(data)
     });
   } catch (err) {
-    console.error("Failed to send to AWS:", err);
+    console.error("AWS send failed:", err);
   }
 
-  // Still return data to browser
   res.status(200).json(data);
 }
